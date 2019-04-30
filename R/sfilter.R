@@ -98,6 +98,15 @@ sfilter <-
       mutate(isd = ifelse(is.na(isd), FALSE, isd)) %>%
       mutate(id = ifelse(is.na(id), na.omit(unique(id))[1], id))
 
+    ## check how many ts prediction times are missing from d.all
+    nms <- nrow(ts) - filter(d.all, !isd) %>% nrow()
+
+    ## throw warning if nms > 0
+    if(nms > 0) warning(
+      "at least some prediction times exactly match observation times, \nconsider using `fitted` values instead",
+      call. = FALSE,
+      immediate. = FALSE)
+
     ## calc delta times in hours for observations & interpolation points (states)
     dt <- difftime(d.all$date, lag(d.all$date), units = "hours") %>%
       as.numeric() / 24

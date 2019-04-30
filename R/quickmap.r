@@ -55,7 +55,8 @@ quickmap <- function(x,
     sf_data <- x$data %>% st_transform(., crs)
     }
 
-  bounds <- st_bbox(sf_locs)
+  if(obs) bounds <- st_bbox(sf_data)
+  else bounds <- st_bbox(sf_locs)
   bounds[c("xmin","xmax")] <- extendrange(bounds[c("xmin","xmax")], f = ext.rng[1])
   bounds[c("ymin","ymax")] <- extendrange(bounds[c("ymin","ymax")], f = ext.rng[2])
 
@@ -80,7 +81,8 @@ quickmap <- function(x,
     if(!outlier) {
       sf_data <- sf_data %>% filter(keep)
     }
-    p <- p + geom_sf(data = sf_data, colour = "orange", size = 2, shape = 18, alpha = 0.3)
+    browser()
+    p <- p + geom_sf(data = sf_data, colour = "orange", size = 2, shape = 18, alpha = 0.8)
   }
 
   if(length(unique(x$id)) > 1) {
